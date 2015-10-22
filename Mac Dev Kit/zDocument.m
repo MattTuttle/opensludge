@@ -36,10 +36,10 @@
 		NSString *path = nil;
 		NSOpenPanel *openPanel = [ NSOpenPanel openPanel ];
 		[openPanel setTitle:@"Load file to zBuffer"];
-		NSArray *files = [NSArray arrayWithObjects:@"tga", nil];
+        [openPanel setAllowedFileTypes:@[@"tga"]];
 		
-		if ( [ openPanel runModalForDirectory:nil file:nil types:files] ) {
-			path = [ openPanel filename ];
+		if ( [ openPanel runModal] ) {
+			path = [[ openPanel URL ] path];
 			bool success = loadZBufferFromTGA ((char *) [path UTF8String], &backdrop);
 			if (! success) {
 				[self close];
@@ -69,7 +69,7 @@
 			 ofType:(NSString *)typeName 
 			  error:(NSError **)outError
 {
-	if ([typeName isEqualToString:@"SLUDGE zBuffer"]) {		
+	if ([typeName isEqualToString:ZBUFFER_FILE_TYPE]) {
 		UInt8 path[1024];
 		if (CFURLGetFileSystemRepresentation((CFURLRef) absoluteURL, true, path, 1023)) {
 			if (loadZBufferFile ((char *) path, &backdrop)) {
@@ -85,7 +85,7 @@
 			ofType:(NSString *)typeName 
 			 error:(NSError **)outError
 {
-	if ([typeName isEqualToString:@"SLUDGE zBuffer"]) {		
+	if ([typeName isEqualToString:ZBUFFER_FILE_TYPE]) {		
 		UInt8 path[1024];
 		if (CFURLGetFileSystemRepresentation((CFURLRef) absoluteURL, true, path, 1023)) {
 			if (saveZBufferFile ((char *) path, &backdrop)) {

@@ -9,8 +9,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-//#include <OpenGL/gl.h>
-#include "GLee.h"
+#include <OpenGL/gl.h>
 
 #include "floormaker.h"
 #include "interface.h"

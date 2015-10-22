@@ -6,13 +6,14 @@
 //  Copyright 2009 __MyCompanyName__. All rights reserved.
 //
 
-//#include <OpenGL/gl.h>
-#include "glee.h"
+#include <OpenGL/gl.h>
 #import <Cocoa/Cocoa.h>
 #import "SLUDGE Document.h"
 
 #include "FloorMaker.h"
 #include "sprites.h"
+
+#define FLOOR_FILE_TYPE @"com.hungrysoftware.sludge-floor"
 
 @interface FloorOpenGLView : NSOpenGLView
 {

@@ -72,7 +72,7 @@
 			 ofType:(NSString *)typeName 
 			  error:(NSError **)outError
 {
-	if ([typeName isEqualToString:@"SLUDGE Translation file"]) {	
+	if ([typeName isEqualToString:TRANSLATION_FILE_TYPE]) {
 		UInt8 buffer[1024];
 		if (CFURLGetFileSystemRepresentation((CFURLRef) absoluteURL, true, buffer, 1023)) {
 			if (loadTranslationFile ((char *) buffer, &firstTransLine, &langName, &langID)) {
@@ -89,7 +89,7 @@
 			ofType:(NSString *)typeName 
 			 error:(NSError **)outError
 {
-	if ([typeName isEqualToString:@"SLUDGE Translation file"]) {		
+	if ([typeName isEqualToString:TRANSLATION_FILE_TYPE]) {
 		UInt8 buffer[1024];
 		if (CFURLGetFileSystemRepresentation((CFURLRef) absoluteURL, true, buffer, 1023)) {
 			if (saveTranslationFile ((char *) buffer, firstTransLine, langName, langID)) {

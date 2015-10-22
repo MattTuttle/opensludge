@@ -1,8 +1,7 @@
 #ifndef __SPRITES_H__
 #define __SPRITES_H__
 
-//#include <OpenGL/gl.h>
-#include "GLee.h"
+#include <OpenGL/gl.h>
 
 #ifdef __cplusplus
 extern "C" {

@@ -9,6 +9,8 @@
 #import <Cocoa/Cocoa.h>
 #import "SLUDGE Document.h"
 
+#define TRANSLATION_FILE_TYPE @"com.hungrysoftware.sludge-translation"
+
 
 @interface stringTable : NSTableView {
 	int type;

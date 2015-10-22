@@ -10,6 +10,8 @@
 #import "SLUDGE Document.h"
 
 
+#define ZBUFFER_FILE_TYPE @"com.hungrysoftware.sludge-zbuf"
+
 //
 //  SpriteBank.h
 //  Sludge Dev Kit
@@ -19,8 +21,7 @@
 //
 
 
-//#include <OpenGL/gl.h>
-#include "glee.h"
+#include <OpenGL/gl.h>
 #import <Cocoa/Cocoa.h>
 #include "sprites.h"
 

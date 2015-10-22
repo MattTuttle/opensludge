@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#define SCRIPT_FILE_TYPE @"com.hungrysoftware.sludge-script"
+
 @interface SLUDGE_Document : NSDocument {
 	SLUDGE_Document *project;
 }

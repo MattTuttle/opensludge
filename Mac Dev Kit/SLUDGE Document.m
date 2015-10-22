@@ -29,7 +29,7 @@
 			NSSavePanel *savePanel = [ NSSavePanel savePanel ];
 			NSArray *files;
 
-			if ([[self fileType] compare: @"SLUDGE Script"] == NSOrderedSame) {
+			if ([[self fileType] compare: SCRIPT_FILE_TYPE] == NSOrderedSame) {
 
 				if (NSRunAlertPanel ([p getTitle], @"Do you want to add the new file to the project?", @"Yes", @"No", NULL) == NSAlertDefaultReturn) {				
 					
@@ -38,7 +38,7 @@
 					[savePanel setAllowedFileTypes:files];
 				
 					if ( [savePanel runModal] ) {
-						path = [ savePanel filename ];
+						path = [[savePanel URL] path];
 					}				
 				}
 			} else if ([[self fileType] compare: @"SLUDGE Translation file"] == NSOrderedSame) {
@@ -50,22 +50,19 @@
 					[savePanel setAllowedFileTypes:files];
 					
 					if ( [savePanel runModal] ) {
-						path = [ savePanel filename ];
+						path = [[ savePanel URL ] path];
 					}				
 				}
 			}
 			if (path) {	
 				NSURL *file = [NSURL fileURLWithPath: path];
-				NSError **err;
-				
-				if ([self saveToURL: [file absoluteURL] 
-							 ofType: [self fileType]
-				   forSaveOperation: NSSaveOperation 
-							  error: err]) {
-					
-					[p addNamedFileToProject: file];
-					project = p;
-				}
+                [self saveToURL:[file absoluteURL] ofType:[self fileType] forSaveOperation:NSSaveOperation completionHandler:^(NSError *error) {
+                    if (!error)
+                    {
+                        [p addNamedFileToProject: file];
+                        project = p;
+                    }
+                }];
 			}
 		} else {
 			// File exists ... look for it in project!

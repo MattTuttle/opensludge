@@ -26,7 +26,7 @@ void addFunction (NSMutableDictionary *words, char *name) {
 - (void)awakeFromNib
 {
 
-	[[text textStorage] setDelegate:self];
+	[text textStorage].delegate = self;
 	
 	// load our dictionary
 	whiteSpaceSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];

@@ -63,7 +63,7 @@ NSModalSession session = nil;
 			 ofType:(NSString *)typeName 
 			  error:(NSError **)outError
 {
-	if ([typeName isEqualToString:@"SLUDGE Project file"]) {	
+	if ([typeName isEqualToString:PROJECT_FILE_TYPE]) {
 		UInt8 buffer[1024];
 		if (CFURLGetFileSystemRepresentation((CFURLRef) absoluteURL, true, buffer, 1023)) {
 			if (loadProject ((char *) buffer, fileList, &fileListNum)) {
@@ -81,7 +81,7 @@ NSModalSession session = nil;
 			 error:(NSError **)outError
 {
 	[self setSettings];
-	if ([typeName isEqualToString:@"SLUDGE Project file"]) {	
+	if ([typeName isEqualToString:PROJECT_FILE_TYPE]) {
 		UInt8 buffer[1024];
 		if (CFURLGetFileSystemRepresentation((CFURLRef) absoluteURL, true, buffer, 1023)) {
 			if (saveProject ((char *) buffer, fileList, &fileListNum)) {
@@ -234,10 +234,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	NSString *path = nil;
 	NSOpenPanel *openPanel = [ NSOpenPanel openPanel ];
 	[openPanel setTitle:@"Add file to SLUDGE Project"];
-	NSArray *files = [NSArray arrayWithObjects:@"slu", @"sld", @"tra", nil];
-	
-	if ( [ openPanel runModalForDirectory:nil file:nil types:files] ) {
-		path = [ openPanel filename ];
+    [openPanel setAllowedFileTypes:@[@"slu", @"sld", @"tra"]];
+    
+	if ( [ openPanel runModal] ) {
+		path = [[ openPanel URL ] path];
 		UInt8 filename[1024];
 		if (! CFURLGetFileSystemRepresentation((CFURLRef) [self fileURL], true, filename, 1023))
 			return;
@@ -484,7 +484,7 @@ void clearRect (int i, int whichBox) {
 		[me setProgress2max:i?i:1];
 }
 
-void setCompilerText (const where, const char * tx) {
+void setCompilerText (const int where, const char * tx) {
 	[me setText:tx here:where];
 }
 
@@ -498,8 +498,6 @@ void compilerCommentsUpdated() {
 
 // For Mac OS X, we don't use these functions:
 
-void setFinished(bool success)
-{}
+void setFinished(bool success) {}
 
-void setInfoReceiver(void (*infoReceiver)(compilerInfo *))
-{}
+void setInfoReceiver(void (*infoReceiver)(compilerInfo *)) {}

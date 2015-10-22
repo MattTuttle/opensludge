@@ -82,7 +82,7 @@ extern NSModalSession session;
 			 ofType:(NSString *)typeName 
 			  error:(NSError **)outError
 {
-	if ([typeName isEqualToString:@"SLUDGE Sprite Bank"]) {		
+	if ([typeName isEqualToString:SPRITEBANK_FILE_TYPE]) {
 		UInt8 buffer[1024];
 		if (CFURLGetFileSystemRepresentation((CFURLRef) absoluteURL, true, buffer, 1023)) {
 			if (loadSpriteBank ((char *) buffer, &sprites)) {
@@ -98,7 +98,7 @@ extern NSModalSession session;
 			ofType:(NSString *)typeName 
 			 error:(NSError **)outError
 {
-	if ([typeName isEqualToString:@"SLUDGE Sprite Bank"]) {		
+	if ([typeName isEqualToString:SPRITEBANK_FILE_TYPE]) {
 		UInt8 buffer[1024];
 		if (CFURLGetFileSystemRepresentation((CFURLRef) absoluteURL, true, buffer, 1023)) {
 			if (saveSpriteBank ((char *) buffer, &sprites)) {

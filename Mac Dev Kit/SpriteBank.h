@@ -7,11 +7,12 @@
 //
 
 
-//#include <OpenGL/gl.h>
-#include "GLee.h"
+#include <OpenGL/gl.h>
 #import <Cocoa/Cocoa.h>
 #import "SLUDGE Document.h"
 #include "sprites.h"
+
+#define SPRITEBANK_FILE_TYPE @"com.hungrysoftware.sludge-spritebank"
 
 @interface SpriteOpenGLView : NSOpenGLView
 {

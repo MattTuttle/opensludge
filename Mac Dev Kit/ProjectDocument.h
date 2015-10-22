@@ -9,6 +9,8 @@
 #import <Cocoa/Cocoa.h>
 #import "SLUDGE Document.h"
 
+#define PROJECT_FILE_TYPE @"com.hungrysoftware.sludge-project"
+
 
 @interface ProjectDocument : SLUDGE_Document {
 	// Main window

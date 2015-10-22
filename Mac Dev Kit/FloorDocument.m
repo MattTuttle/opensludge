@@ -59,7 +59,7 @@
 			 ofType:(NSString *)typeName 
 			  error:(NSError **)outError
 {
-	if ([typeName isEqualToString:@"SLUDGE Floor"]) {	
+	if ([typeName isEqualToString:FLOOR_FILE_TYPE]) {
 		UInt8 buffer[1024];
 		if (CFURLGetFileSystemRepresentation((CFURLRef) absoluteURL, true, buffer, 1023)) {
 			if (loadFloorFromFile ((char *) buffer, &firstPoly)) {
@@ -75,7 +75,7 @@
 			ofType:(NSString *)typeName 
 			 error:(NSError **)outError
 {
-	if ([typeName isEqualToString:@"SLUDGE Floor"]) {		
+	if ([typeName isEqualToString:FLOOR_FILE_TYPE]) {
 		UInt8 buffer[1024];
 		if (CFURLGetFileSystemRepresentation((CFURLRef) absoluteURL, true, buffer, 1023)) {
 			if (saveFloorToFile ((char *) buffer, &firstPoly)) {
@@ -104,10 +104,10 @@
 	NSString *path = nil;
 	NSOpenPanel *openPanel = [ NSOpenPanel openPanel ];
 	[openPanel setTitle:@"Load file as sprite"];
-	NSArray *files = [NSArray arrayWithObjects:@"tga", @"png", nil];
+    [openPanel setAllowedFileTypes:@[@"tga", @"png"]];
 	
-	if ( [ openPanel runModalForDirectory:nil file:nil types:files] ) {
-		path = [ openPanel filename ];
+	if ( [ openPanel runModal] ) {
+		path = [[ openPanel URL ] path];
 		bool success = 0;
 		if ([[path pathExtension] isEqualToString: @"png"]) {
 			success = loadSpriteFromPNG ((char *) [path UTF8String], &backdrop, 0);

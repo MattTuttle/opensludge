@@ -1,12 +1,17 @@
 #import "SpriteBank.h"
 #import <unistd.h>
+#import <sys/stat.h>
 
 #import "AppController.h"
 
+#include "project.hpp"
 #include "settings.h"
 #import "ProjectDocument.h"
+#import "zDocument.h"
 #import "ScriptDocument.h"
 #import "SLUDGE Document.h"
+#import "FloorDocument.h"
+#import "TranslationDocument.h"
 
 AppController *aC;
 
@@ -32,88 +37,77 @@ AppController *aC;
 	return [docControl openDocument: sender];
 }
 
+- (NSDocument *)createFile:(NSString *)fileType
+{
+    NSError *err;
+    NSDocumentController *docControl = [NSDocumentController sharedDocumentController];
+    NSDocument *doc = [docControl makeUntitledDocumentOfType:fileType error:&err];
+    if (err) { return nil; }
+    
+    [docControl addDocument: doc];
+    [doc makeWindowControllers];
+    [doc showWindows];
+    return doc;
+}
+
+- (ProjectDocument *)currentProject
+{
+    SLUDGE_Document *doc = [[NSDocumentController sharedDocumentController] currentDocument];
+    return (ProjectDocument *)[doc project];
+}
+
 - (IBAction)newProject:(id)sender
 {    
 	NSString *path = nil;
 	NSSavePanel *savePanel = [ NSSavePanel savePanel ];
 	[savePanel setTitle:@"New SLUDGE Project"];
-	[savePanel setRequiredFileType:@"slp"];
+    [savePanel setAllowedFileTypes:@[@"slp"]];
 	
-	if ( [ savePanel runModalForDirectory:nil file:nil ] ) {
-		path = [ savePanel filename ];
+	if ( [ savePanel runModal ] ) {
+		path = [[savePanel URL] path];
 		int numFiles = 0;
 		doNewProject ([path UTF8String], 0, &numFiles);
 	}
 	
 	if (path) {	
 		NSURL *file = [NSURL fileURLWithPath: path];
+        
+        NSError *err;
 		NSDocumentController *docControl = [NSDocumentController sharedDocumentController];
-		NSError **err;
-		NSDocument *project = [docControl makeDocumentWithContentsOfURL:file ofType:@"SLUDGE Project file" error:err];
+		NSDocument *project = [docControl makeDocumentWithContentsOfURL:file ofType:PROJECT_FILE_TYPE error:&err];
 		if (project) {
 			[docControl addDocument: project];
 			[project makeWindowControllers];
 			[project showWindows];
-		}
+        } else {
+            NSLog(@"%@", [err localizedDescription]);
+        }
 	}
 }
 
 - (IBAction)scriptNew:(id)sender
 {
-	NSDocumentController *docControl = [NSDocumentController sharedDocumentController];
-	NSError **err;
-	SLUDGE_Document *doc = [docControl makeUntitledDocumentOfType:@"SLUDGE Script" error:err];
-	[docControl addDocument: doc];
-	[doc makeWindowControllers];
-	[doc showWindows];
-		
+    [self createFile:SCRIPT_FILE_TYPE];
 }
-
 - (IBAction)spriteBankNew:(id)sender
 {
-	NSDocumentController *docControl = [NSDocumentController sharedDocumentController];
-	NSError **err;
-	SpriteBank *doc = [docControl makeUntitledDocumentOfType:@"SLUDGE Sprite Bank" error:err];
-	[docControl addDocument: doc];
-	[doc makeWindowControllers];
-	[doc showWindows];
+    [self createFile:SPRITEBANK_FILE_TYPE];
 }
 - (IBAction)spriteBankFontify:(id)sender
 {
-	NSDocumentController *docControl = [NSDocumentController sharedDocumentController];
-	NSError **err;
-	SpriteBank *doc = [docControl makeUntitledDocumentOfType:@"SLUDGE Sprite Bank" error:err];
-	[docControl addDocument: doc];
-	[doc makeWindowControllers];
-	[doc showWindows];
-	[doc fontifyMe];
+	[(SpriteBank *)[self createFile:SPRITEBANK_FILE_TYPE] fontifyMe];
 }
 - (IBAction)floorNew:(id)sender
 {
-	NSDocumentController *docControl = [NSDocumentController sharedDocumentController];
-	NSError **err;
-	SLUDGE_Document *doc = [docControl makeUntitledDocumentOfType:@"SLUDGE Floor" error:err];
-	[docControl addDocument: doc];
-	[doc makeWindowControllers];
-	[doc showWindows];
+	[self createFile:FLOOR_FILE_TYPE];
 }
 - (IBAction)translationNew:(id)sender
 {
-	NSDocumentController *docControl = [NSDocumentController sharedDocumentController];
-	NSError **err;
-	SLUDGE_Document *doc = [docControl makeUntitledDocumentOfType:@"SLUDGE Translation file" error:err];
-	[docControl addDocument: doc];
-	[doc makeWindowControllers];
-	[doc showWindows];
+	[self createFile:TRANSLATION_FILE_TYPE];
 }
 - (IBAction)zBufferNew:(id)sender
 {
-	NSDocumentController *docControl = [NSDocumentController sharedDocumentController];
-	NSError **err;
-	SLUDGE_Document *doc = [docControl makeUntitledDocumentOfType:@"SLUDGE zBuffer" error:err];
-	[docControl addDocument: doc];
-	[doc makeWindowControllers];
-	[doc showWindows];
+	[self createFile:ZBUFFER_FILE_TYPE];
 }
 
 - (IBAction)prefsMenu:(id)sender
@@ -126,20 +120,8 @@ AppController *aC;
 	
 }
 
-- (IBAction)compileMenu:(id)sender
-{
-	SLUDGE_Document *doc = [[NSDocumentController sharedDocumentController] currentDocument];
-	ProjectDocument *p = (ProjectDocument *)[doc project];
-	
-	[p compile];
-}
-- (IBAction)projectPrefsMenu:(id)sender{
-	SLUDGE_Document *doc = [[NSDocumentController sharedDocumentController] currentDocument];
-	ProjectDocument *p = (ProjectDocument *)[doc project];
-	
-	[p showProjectPrefs];
-}
-
+- (IBAction)compileMenu:(id)sender { [[self currentProject] compile]; }
+- (IBAction)projectPrefsMenu:(id)sender { [[self currentProject] showProjectPrefs]; }
 
 /*
 OSStatus RegisterMyHelpBook(void)
@@ -217,7 +199,7 @@ bail: return err;
 	MyGotoHelpPage(NULL, NULL);
 }
 
-- (BOOL)validateMenuItem:(id <NSMenuItem>)menuItem {
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
 	int t = [menuItem tag];
 	SLUDGE_Document *doc = [[NSDocumentController sharedDocumentController] currentDocument];
 	ProjectDocument *p = (ProjectDocument *)[doc project];
@@ -237,7 +219,7 @@ bail: return err;
 			return false;
 	} else if (t == 2000)  {
 		// For script editor
-		if (! [[doc fileType] isEqualToString:@"SLUDGE Script"])
+		if (! [[doc fileType] isEqualToString:SCRIPT_FILE_TYPE])
 			return false;
 	}
 	return true;
@@ -304,14 +286,13 @@ const char * getTempDir () {
 }
 
 bool askAQuestion (const char * head, const char * msg) {
-	if (! NSRunAlertPanel ([NSString stringWithUTF8String: head], [NSString stringWithUTF8String: msg], @"Yes", @"No", NULL) == NSAlertDefaultReturn)
+	if (! NSRunAlertPanel ([NSString stringWithUTF8String: head], @"%@", @"Yes", @"No", NULL, [NSString stringWithUTF8String:msg]) == NSAlertDefaultReturn)
 		return false;
 	return true;
 }
 
-
 bool errorBox (const char * head, const char * msg) {
-	NSRunAlertPanel ([NSString stringWithUTF8String: head], [NSString stringWithUTF8String: msg], NULL, NULL, NULL);
+	NSRunAlertPanel ([NSString stringWithUTF8String: head], @"%@", NULL, NULL, NULL, [NSString stringWithUTF8String: msg]);
 	return false;
 }
 
@@ -418,7 +399,6 @@ void readIniFile () {
 
 int main(int argc, char *argv[])
 {
-	
 	readIniFile ();
 	
 	return NSApplicationMain (argc, (const char **) argv);
