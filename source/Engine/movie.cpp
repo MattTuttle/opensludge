@@ -7,6 +7,24 @@
  *
  */
 
+#include "movie.h"
+#include "graphics.h"
+
+// global variables
+GLuint yTextureName = 0;
+GLuint uTextureName = 0;
+GLuint vTextureName = 0;
+movieStates movieIsPlaying = nothing;
+
+#ifndef MOVIE_VORBIS
+
+int playMovie(int fileNumber) { return 0; }
+int stopMovie() { return 0; }
+int pauseMovie() { return 0; }
+void setMovieViewport() {}
+
+#else
+
 #include <SDL/SDL.h>
 #include <math.h>
 
@@ -22,8 +40,6 @@
 
 #include "newfatal.h"
 #include "timing.h"
-#include "graphics.h"
-#include "movie.h"
 #include "shaders.h"
 
 #include "sound.h"
@@ -33,7 +49,7 @@
 #include "ogg/ogg.h"
 #include "libvorbis/vorbis_os.h"
 
-#include "AL/alure.h"
+//#include "AL/alure.h"
 
 
 extern int specialSettings;
@@ -49,9 +65,6 @@ bool handleInput ();
 void playMovieStream (int a);
 int initMovieSound(int f, ALenum format, int audioChannels, ALuint samplerate,
 				   ALuint (*callback)(void *userdata, ALubyte *data, ALuint bytes));
-
-
-movieStates movieIsPlaying = nothing;
 
 int movieIsEnding = 0;
 
@@ -81,9 +94,6 @@ long long audioNsBuffered;
 long long audioBufferLen;
 bool movieSoundPlaying = false;
 int movieAudioIndex;
-GLuint yTextureName = 0;
-GLuint uTextureName = 0;
-GLuint vTextureName = 0;
 
 typedef struct videoBuffers {
 	GLubyte * ytex;
@@ -1003,3 +1013,5 @@ int pauseMovie()
 	}
 	return movieIsPlaying;
 }
+
+#endif

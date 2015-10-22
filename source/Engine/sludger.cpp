@@ -1,29 +1,17 @@
-#if defined __unix__ && !(defined __APPLE__)
-#include <png.h>
-#else
-#include <libpng/png.h>
-#endif
-
 #include "allfiles.h"
 #include <SDL/SDL.h>
+#include <png.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <iconv.h>
-
-#if !defined(HAVE_GLES2)
-#include "GLee.h"
-#else
-#include <GLES2/gl2.h>
-#include "eglport/eglport.h"
-#endif
-
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
 
 #include "platform-dependent.h"
+#include "opengl.h"
 #include "version.h"
 #include "sludger.h"
 #include "backdrop.h"

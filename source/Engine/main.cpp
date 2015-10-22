@@ -1,6 +1,4 @@
-#if defined __unix__ && !(defined __APPLE__)
 #include "linuxstuff.h"
-#endif
 
 #ifdef _WIN32
 #include "winstuff.h"
@@ -18,16 +16,10 @@
 #include <time.h>
 #include <sys/time.h>
 
-#if !defined(HAVE_GLES2)
-#include "GLee.h"
-#else
-#include <GLES2/gl2.h>
-#include "eglport/eglport.h"
-#endif
-
 #include <SDL/SDL.h>
 #include <SDL/SDL_syswm.h>
 
+#include "opengl.h"
 #include "debug.h"
 #include "platform-dependent.h"
 #include "language.h"
@@ -48,13 +40,6 @@
 #include "sludger.h"
 #include "graphics.h"
 #include "helpers.h"
-
-
-#ifdef _WIN32
-#define PATHSLASH '\\'
-#else
-#define PATHSLASH '/'
-#endif
 
 extern bool runningFullscreen;
 
@@ -321,17 +306,19 @@ int main(int argc, char *argv[]) try
 		}
 	}
 
-#if defined __unix__ && !(defined __APPLE__)
+#if PLATFORM_LINUX
 	if (! parseCmdlineParameters(argc, argv) ) {
 		printCmdlineUsage();
 		return 0;
 	}
+#endif
 	if (! fileExists(sludgeFile) ) {
 		fprintf(stderr, "Game file not found.\n");
+#if PLATFORM_LINUX
 		printCmdlineUsage();
+#endif
 		return 0;
 	}
-#endif
 
 	// The player pressed cancel in the file selection dialogue,
 	// so we should quit now.

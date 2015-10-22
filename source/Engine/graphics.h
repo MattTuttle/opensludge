@@ -9,12 +9,7 @@
 #ifndef __SLUDGE_GRAPHICS_H__
 #define __SLUDGE_GRAPHICS_H__
 
-#if !defined(HAVE_GLES2)
-#include "GLee.h"
-#else
-#include <GLES2/gl2.h>
-#include "eglport/eglport.h"
-#endif
+#include "opengl.h"
 
 struct texture {
 	GLubyte * data;

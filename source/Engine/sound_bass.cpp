@@ -1,3 +1,5 @@
+#ifdef AUDIO_BASS
+
 #include <stdint.h>
 
 #include "allfiles.h"
@@ -375,3 +377,4 @@ bool getSoundCacheStack (stackHandler * sH) {
 	return true;
 }
 
+#endif // AUDIO_BASS

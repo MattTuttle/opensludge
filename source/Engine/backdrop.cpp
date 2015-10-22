@@ -1,18 +1,8 @@
-#if defined __unix__ && !(defined __APPLE__)
 #include <png.h>
-#else
-#include <libpng/png.h>
-#endif
-
 #include <stdlib.h>
 #include <stdint.h>
 
-#if !defined(HAVE_GLES2)
-#include "GLee.h"
-#else
-#include <GLES2/gl2.h>
-#endif
-
+#include "opengl.h"
 #include "allfiles.h"
 
 #include "debug.h"

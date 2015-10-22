@@ -3,7 +3,7 @@
 
 */
 
-#import "SDL.h"
+#import <SDL/SDL.h>
 #import "OSXMain.h"
 #import <sys/param.h> /* for MAXPATHLEN */
 #import <unistd.h>
@@ -263,7 +263,7 @@ int main (int argc, char *argv[])
         gFinderLaunch = NO;
     }
 
-    [SDLApplication poseAsClass:[NSApplication class]];
+//    [SDLApplication poseAsClass:[NSApplication class]];
     NSApplicationMain (argc, (const char **) argv);
     return 0;
 }

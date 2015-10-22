@@ -1,5 +1,5 @@
 #if !defined(HAVE_GLES2)
-#include "GLee.h"
+#include <OpenGL/gl.h>
 #else
 #include <GLES2/gl2.h>
 #endif

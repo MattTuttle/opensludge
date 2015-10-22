@@ -1,4 +1,4 @@
-#import "SpriteBank.h"
+#import <Carbon/Carbon.h>
 #import <unistd.h>
 #import <sys/stat.h>
 
@@ -6,6 +6,7 @@
 
 #include "project.hpp"
 #include "settings.h"
+#import "SpriteBank.h"
 #import "ProjectDocument.h"
 #import "zDocument.h"
 #import "ScriptDocument.h"
@@ -152,18 +153,16 @@ bail: return err;
 
 OSStatus MyGotoHelpPage (CFStringRef pagePath, CFStringRef anchorName)
 {
-    CFBundleRef myApplicationBundle = NULL;
     CFStringRef myBookName = NULL;
-    CFURLRef myBundleURL;
     FSRef myBundleRef;
     OSStatus err = noErr;
 	
-    myApplicationBundle = CFBundleGetMainBundle();
+    CFBundleRef myApplicationBundle = CFBundleGetMainBundle();
 	if (myApplicationBundle == NULL) {
 		err = fnfErr; goto bail;
 	}
 		
-	myBundleURL = CFBundleCopyBundleURL(myApplicationBundle);
+	CFURLRef myBundleURL = CFBundleCopyBundleURL(myApplicationBundle);
 	if (myBundleURL == NULL) {
 		err = fnfErr; goto bail;
 	}

@@ -17,6 +17,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#ifdef AUDIO_OPENAL
+
 #include <stdint.h>
 #include <stdio.h>
 
@@ -765,3 +767,5 @@ int initMovieSound(int f, ALenum format, int audioChannels, ALuint samplerate,
 unsigned int getSoundSource(int index) {
 	return soundCache[index].playingOnSource;
 }
+
+#endif // AUDIO_OPENAL

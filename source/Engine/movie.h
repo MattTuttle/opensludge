@@ -21,3 +21,4 @@ extern movieStates movieIsPlaying;
 int playMovie (int fileNumber);
 int stopMovie ();
 int pauseMovie();
+void setMovieViewport();

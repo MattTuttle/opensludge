@@ -3,6 +3,12 @@
  */
 #include <stdint.h>
 
+#ifdef _WIN32
+#define PATHSLASH '\\'
+#else
+#define PATHSLASH '/'
+#endif
+
 char * grabFileName ();
 int showSetupWindow();
 

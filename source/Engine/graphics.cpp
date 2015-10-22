@@ -36,8 +36,6 @@ bool NPOT_textures = true;
 
 extern int specialSettings;
 
-void setMovieViewport();
-
 extern GLuint backdropTextureName;
 extern GLuint snapshotTextureName;
 extern unsigned int sceneWidth, sceneHeight;
@@ -779,57 +777,10 @@ void setupOpenGLStuff() {
 
 	setGraphicsWindow(gameSettings.userFullScreen, false);
 
-#if !defined(HAVE_GLES2)
-	/* Check for graphics capabilities... */
-	if (GLEE_VERSION_2_0) {
-		// Yes! Textures can be any size!
-		NPOT_textures = true;
-		debugOut( "OpenGL 2.0! All is good.\n");
-	} else {
-		if (GLEE_VERSION_1_5) {
-			debugOut("OpenGL 1.5!\n");
-		}
-		else if (GLEE_VERSION_1_4) {
-			debugOut("OpenGL 1.4!\n");
-		}
-		else if (GLEE_VERSION_1_3) {
-			debugOut( "OpenGL 1.3!\n");
-		}
-		else if (GLEE_VERSION_1_2) {
-			debugOut( "OpenGL 1.2!\n");
-		}
-		if (GLEE_ARB_texture_non_power_of_two) {
-			// Yes! Textures can be any size!
-			NPOT_textures = true;
-		} else {
-			// Workaround needed for lesser graphics cards. Let's hope this works...
-			NPOT_textures = false;
-			debugOut( "Warning: Old graphics card! GLEE_ARB_texture_non_power_of_two not supported.\n");
-		}
-
-		if (GLEE_ARB_shading_language_100) {
-			debugOut("ARB_shading_language_100 supported.\n");
-		} else {
-			debugOut("Warning: Old graphics card! ARB_shading_language_100 not supported. Try updating your drivers.\n");
-		}
-		if (GLEE_ARB_shader_objects) {
-			debugOut("ARB_shader_objects supported.\n");
-		} else {
-			fatal("Error: Old graphics card! ARB_shader_objects not supported.\n");
-		}
-		if (GLEE_ARB_vertex_shader) {
-			debugOut("ARB_vertex_shader supported.\n");
-		} else {
-			fatal("Error: Old graphics card! ARB_vertex_shader not supported.\n");
-		}
-		if (GLEE_ARB_fragment_shader) {
-			debugOut("ARB_fragment_shader supported.\n");
-		} else {
-			fatal("Error: Old graphics card! ARB_fragment_shader not supported.\n");
-		}
-	}
-#else
+#if defined(HAVE_GLES2)
 	NPOT_textures = false;
+#else
+    NPOT_textures = true;
 #endif
 
 	int n;
